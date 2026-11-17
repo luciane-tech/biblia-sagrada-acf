@@ -206,9 +206,13 @@ O `eas submit` envia ao App Store Connect / TestFlight. Para Android, `eas submi
 ## 6. Versão web na Vercel (via GitHub)
 
 O mesmo código gera um site (`npx expo export -p web` → pasta `dist`). O
-`vercel.json` já define instalação, build, pasta de saída, rotas e os cabeçalhos
-COOP/COEP que o SQLite exige no navegador. Na web, os dados (favoritos,
-destaques, preferências) ficam guardados no próprio navegador de cada pessoa.
+`vercel.json` já define instalação, build, pasta de saída e rotas.
+
+No navegador o SQLite **não** é usado, porque o armazenamento dele só aceita uma
+aba aberta por vez. Em vez disso, o texto bíblico é montado em memória
+(`src/db/bibliaMemoria.ts`) e favoritos, destaques e preferências ficam no
+`localStorage` de cada navegador (`src/db/usuario.ts`). No Android e no iPhone,
+tudo continua no SQLite.
 
 **1. Enviar o projeto ao GitHub**
 

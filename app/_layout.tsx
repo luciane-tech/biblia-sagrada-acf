@@ -4,7 +4,7 @@
  * que tudo esteja pronto. Assim a primeira tela já aparece completa.
  */
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -54,13 +54,6 @@ export default function Raiz() {
     setErro(null);
     (async () => {
       try {
-        // No navegador, o banco local exige isolamento entre origens (COOP/COEP).
-        // Sem ele, o SQLite trava em silêncio — melhor explicar do que ficar em branco.
-        if (Platform.OS === 'web' && typeof window !== 'undefined' && !window.crossOriginIsolated) {
-          throw new Error(
-            'Este site foi publicado sem os cabeçalhos COOP/COEP exigidos pelo banco de dados local. Verifique se o arquivo vercel.json está na raiz do repositório.',
-          );
-        }
         await comLimiteDeTempo(inicializarBancos(), 30000);
         const carregadas = await carregarPreferencias();
         if (ativo) setPrefs(carregadas);

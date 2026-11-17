@@ -12,6 +12,7 @@ import { Platform } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import { carregarArquivoBiblia, versaoEmpacotada } from '../dados/fonte';
 import { normalizar } from '../lib/texto';
+import { carregarBibliaEmMemoria } from './bibliaMemoria';
 
 let biblia: SQLite.SQLiteDatabase | null = null;
 let usuario: SQLite.SQLiteDatabase | null = null;
@@ -38,17 +39,35 @@ export function inicializarBancos(): Promise<void> {
   return inicializacao;
 }
 
+/**
+ * No navegador, o SQLite reserva um armazenamento que só UMA aba pode usar por
+ * vez — com duas abas abertas, a segunda falharia. Por isso, na web o SQLite
+ * não é usado:
+ * - o texto bíblico é montado em memória (src/db/bibliaMemoria.ts);
+ * - os dados do usuário ficam no localStorage (src/db/usuario.ts).
+ */
+export const NA_WEB = Platform.OS === 'web';
+
 async function executarInicializacao(): Promise<void> {
+  if (NA_WEB) {
+    carregarBibliaEmMemoria();
+    return;
+  }
+
   biblia = await SQLite.openDatabaseAsync('biblia.db');
   usuario = await SQLite.openDatabaseAsync('usuario.db');
 
-  // WAL melhora o desempenho no celular; no navegador (WebAssembly) não se aplica.
-  if (Platform.OS !== 'web') {
-    await biblia.execAsync('PRAGMA journal_mode = WAL;');
-    await usuario.execAsync('PRAGMA journal_mode = WAL;');
-  }
+  // WAL melhora o desempenho no celular.
+  await biblia.execAsync('PRAGMA journal_mode = WAL;');
+  await usuario.execAsync('PRAGMA journal_mode = WAL;');
 
-  await biblia.execAsync(`
+  await criarTabelasBiblia(biblia);
+  await criarTabelasUsuario(usuario);
+  await importarTextoSeNecessario(biblia);
+}
+
+async function criarTabelasBiblia(db: SQLite.SQLiteDatabase): Promise<void> {
+  await db.execAsync(`
     CREATE TABLE IF NOT EXISTS meta (
       chave TEXT PRIMARY KEY NOT NULL,
       valor TEXT NOT NULL
@@ -63,8 +82,10 @@ async function executarInicializacao(): Promise<void> {
       PRIMARY KEY (livro, capitulo, versiculo)
     ) WITHOUT ROWID;
   `);
+}
 
-  await usuario.execAsync(`
+async function criarTabelasUsuario(db: SQLite.SQLiteDatabase): Promise<void> {
+  await db.execAsync(`
     CREATE TABLE IF NOT EXISTS favoritos (
       livro INTEGER NOT NULL,
       capitulo INTEGER NOT NULL,
@@ -85,8 +106,6 @@ async function executarInicializacao(): Promise<void> {
       valor TEXT NOT NULL
     );
   `);
-
-  await importarTextoSeNecessario(biblia);
 }
 
 const TAMANHO_LOTE = 150; // 150 linhas × 6 colunas = 900 parâmetros por INSERT
