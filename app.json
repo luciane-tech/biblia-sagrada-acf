@@ -1,6 +1,6 @@
-﻿{
+{
   "expo": {
-    "name": "Bíblia Sagrada ACF",
+    "name": "Bíblia Sagrada",
     "slug": "biblia-sagrada-acf",
     "scheme": "bibliaacf",
     "version": "1.0.0",
@@ -30,8 +30,8 @@
       "bundler": "metro",
       "output": "single",
       "favicon": "./assets/images/favicon.png",
-      "name": "Bíblia Sagrada ACF",
-      "shortName": "Bíblia ACF",
+      "name": "Bíblia Sagrada",
+      "shortName": "Bíblia",
       "lang": "pt-BR",
       "backgroundColor": "#FAF7F0",
       "themeColor": "#FAF7F0"

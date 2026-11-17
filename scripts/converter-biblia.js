@@ -89,8 +89,8 @@ versiculos.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
 
 const saida = {
   meta: {
-    traducao: 'Almeida Corrigida Fiel',
-    sigla: 'ACF',
+    traducao: argumento('traducao', 'Almeida Corrigida Fiel'),
+    sigla: argumento('sigla', 'ACF'),
     versaoDados,
     demonstrativo: false,
     fonte: argumento('fonte', ''),

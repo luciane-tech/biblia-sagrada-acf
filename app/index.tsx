@@ -19,6 +19,8 @@ export default function Inicio() {
   const { prefs, cores } = usePreferencias();
   const [ultima, setUltima] = useState<UltimaLeitura | null>(null);
   const [demonstrativo, setDemonstrativo] = useState(false);
+  const [traducao, setTraducao] = useState('');
+  const [sigla, setSigla] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -27,6 +29,8 @@ export default function Inicio() {
         if (!ativo) return;
         setUltima(leitura);
         setDemonstrativo(info.demonstrativo);
+        setTraducao(info.traducao);
+        setSigla(info.sigla);
         if (!retomadaAutomaticaFeita) {
           retomadaAutomaticaFeita = true;
           if (leitura && prefs.abrirNaUltimaLeitura) {
@@ -49,7 +53,7 @@ export default function Inicio() {
         <Text style={[styles.titulo, { color: cores.titulo }]} accessibilityRole="header">
           Bíblia Sagrada
         </Text>
-        <Text style={[styles.subtitulo, { color: cores.secundario }]}>Almeida Corrigida Fiel</Text>
+        <Text style={[styles.subtitulo, { color: cores.secundario }]}>{traducao || ' '}</Text>
 
         <Ornamento largura={140} espaco={28} />
 
@@ -91,11 +95,16 @@ export default function Inicio() {
         <AtalhoRodape icone="heart-outline" rotulo="Favoritos" destino="/favoritos" />
         <AtalhoRodape icone="text-outline" rotulo="Leitura" destino="/configuracoes" />
       </View>
-      {demonstrativo && (
+      {demonstrativo ? (
         <Text style={[styles.aviso, { color: cores.secundario }]}>
           Base de texto demonstrativa · não contém a Bíblia completa
         </Text>
-      )}
+      ) : sigla ? (
+        // Crédito exigido pela licença do texto (detalhes em Leitura → Sobre o texto).
+        <Text style={[styles.aviso, { color: cores.secundario }]}>
+          Texto bíblico: {traducao} ({sigla}) · CC BY 4.0
+        </Text>
+      ) : null}
     </Tela>
   );
 }

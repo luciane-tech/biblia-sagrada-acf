@@ -77,8 +77,8 @@ function agruparEmParagrafos(versiculos: Versiculo[]): Versiculo[][] {
   return grupos;
 }
 
-const textoParaCompartilhar = (v: Versiculo) =>
-  `“${v.texto}”\n— ${formatarReferencia(v.livro, v.capitulo, v.versiculo)} (ACF)`;
+const textoParaCompartilhar = (v: Versiculo, sigla: string) =>
+  `“${v.texto}”\n— ${formatarReferencia(v.livro, v.capitulo, v.versiculo)}${sigla ? ` (${sigla})` : ''}`;
 
 export default function Leitura() {
   const params = useLocalSearchParams<{ livro: string; capitulo: string; v?: string }>();
@@ -98,6 +98,7 @@ export default function Leitura() {
   const [marcado, setMarcado] = useState(0);
   const [aviso, setAviso] = useState<string | null>(null);
   const [demonstrativo, setDemonstrativo] = useState(false);
+  const [sigla, setSigla] = useState('');
   const [controlesVisiveis, setControlesVisiveis] = useState(true);
 
   const visibilidade = useRef(new Animated.Value(1)).current;
@@ -210,6 +211,7 @@ export default function Leitura() {
       setFavoritos(favs);
       setDestaques(dest);
       setDemonstrativo(info.demonstrativo);
+      setSigla(info.sigla);
       definirControles(true);
       salvarUltimaLeitura({ livro: livroId, capitulo, deslocamento: inicial }).catch(() => {});
 
@@ -285,14 +287,14 @@ export default function Leitura() {
 
   const copiar = async () => {
     if (!selecionado) return;
-    await Clipboard.setStringAsync(textoParaCompartilhar(selecionado));
+    await Clipboard.setStringAsync(textoParaCompartilhar(selecionado, sigla));
     fecharMenu();
     setAviso('Versículo copiado');
   };
 
   const compartilhar = () => {
     if (!selecionado) return;
-    const mensagem = textoParaCompartilhar(selecionado);
+    const mensagem = textoParaCompartilhar(selecionado, sigla);
     fecharMenu();
     // Navegadores de computador geralmente não têm compartilhamento: copia o texto.
     if (Platform.OS === 'web' && !(typeof navigator !== 'undefined' && 'share' in navigator)) {
@@ -437,7 +439,7 @@ export default function Leitura() {
                   </Text>
                   <Text style={[styles.vazioTexto, { color: cores.secundario }]}>
                     {demonstrativo
-                      ? 'O aplicativo está usando uma base demonstrativa. O texto integral da Almeida Corrigida Fiel será incluído após a integração da fonte licenciada.'
+                      ? 'O aplicativo está usando uma base demonstrativa, que não contém a Bíblia completa.'
                       : 'Não foi possível encontrar este capítulo na base instalada.'}
                   </Text>
                 </View>

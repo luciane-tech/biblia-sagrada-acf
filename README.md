@@ -5,12 +5,13 @@ sensação de ler uma Bíblia impressa de boa qualidade: papel bege, tinta marro
 tipografia Lora, margens generosas e controles discretos. Funciona 100% offline,
 sem cadastro, sem anúncios e sem notificações.
 
-> **Situação do texto:** o aplicativo vem com uma **base demonstrativa** (Gn 1:1-5,
-> Sl 1, Sl 23, Jo 1:1-5 e Jo 3:16-17), identificada como tal na tela inicial, na
-> leitura e nas configurações. Esses trechos foram digitados durante o
-> desenvolvimento e **devem ser conferidos/substituídos** pela base licenciada.
-> Capítulos ausentes aparecem esmaecidos na grade e exibem um aviso honesto na
-> leitura — nada é simulado como se estivesse completo.
+> **Situação do texto:** o aplicativo usa hoje a **Bíblia Livre (BLIVRE)**,
+> completa (66 livros, 1.189 capítulos, 31.102 versículos), baseada na Almeida
+> de 1819 (Textus Receptus). Licença Creative Commons Atribuição 4.0 Brasil —
+> o crédito aparece na tela inicial e em Leitura → Sobre o texto. Fonte:
+> eBible.org (`porbr2018_vpl.zip`), texto reproduzido sem alterações.
+> Para trocar pela ACF quando a SBTB autorizar, use o conversor da seção 4
+> com `--traducao "Almeida Corrigida Fiel" --sigla ACF`.
 
 ---
 
