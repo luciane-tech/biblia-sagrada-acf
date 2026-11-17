@@ -237,6 +237,16 @@ tudo continua no SQLite.
 
 **Para testar a versão web no computador:** `npm run web`.
 
+### Instalar no celular (PWA)
+
+O site é um app instalável: `npm run build:web` roda `scripts/pwa.js`, que copia
+`web/` (manifesto, ícones e `sw.js`) para `dist/` e injeta as tags no
+`index.html`. O service worker guarda o app no aparelho, então ele abre sem
+internet depois da primeira visita. Na tela inicial, o botão **Instalar no
+celular** usa o pedido de instalação do Chrome/Edge (Android) ou mostra o passo
+a passo do Safari (iPhone: Compartilhar → Adicionar à Tela de Início). Quando o
+app já está instalado, o botão some.
+
 > A licença do texto ACF precisa cobrir também a publicação em site.
 
 ---

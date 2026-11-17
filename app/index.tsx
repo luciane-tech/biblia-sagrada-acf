@@ -5,6 +5,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Tela } from '../src/componentes/Tela';
 import { Ornamento } from '../src/componentes/Ornamento';
+import { BotaoInstalar } from '../src/componentes/Instalacao';
 import { usePreferencias } from '../src/contexto/Preferencias';
 import { obterUltimaLeitura, UltimaLeitura } from '../src/db/usuario';
 import { obterInfoTexto } from '../src/db/biblia';
@@ -90,6 +91,7 @@ export default function Inicio() {
         </View>
       </View>
 
+      <BotaoInstalar />
       <View style={styles.rodape}>
         <AtalhoRodape icone="search-outline" rotulo="Pesquisar" destino="/pesquisa" />
         <AtalhoRodape icone="heart-outline" rotulo="Favoritos" destino="/favoritos" />
