@@ -362,8 +362,8 @@ export default function Leitura() {
     marginBottom: Math.round(alturaLinha * 0.38),
   };
   const estiloNumero: TextStyle = {
-    fontFamily: FONTES.interfaceMedia,
-    fontSize: Math.round(tamanho * 0.6),
+    fontFamily: FONTES.interfaceForte,
+    fontSize: Math.round(tamanho * 0.62),
     color: cores.numero,
   };
   const sublinhado: TextStyle = {
@@ -487,18 +487,62 @@ export default function Leitura() {
               ))}
 
               {/* Fim do capítulo */}
-              {versiculos !== null && seguinte && (
+              {versiculos !== null && (
                 <>
                   <Ornamento largura={48} espaco={28} />
-                  <Pressable
-                    onPress={() => irPara(seguinte)}
-                    accessibilityRole="button"
-                    style={({ pressed }) => [styles.linkFinal, { opacity: pressed ? 0.5 : 1 }]}
-                  >
-                    <Text style={[styles.textoLink, { color: cores.secundario }]}>
-                      Continuar em {formatarReferencia(seguinte.livro, seguinte.capitulo)}
-                    </Text>
-                  </Pressable>
+                  <View style={styles.botoesFinais}>
+                    <Pressable
+                      onPress={() => irPara(anterior)}
+                      disabled={!anterior}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        anterior
+                          ? `Voltar para ${formatarReferencia(anterior.livro, anterior.capitulo)}`
+                          : 'Sem capítulo anterior'
+                      }
+                      style={({ pressed }) => [
+                        styles.botaoFinal,
+                        { borderColor: cores.titulo, opacity: !anterior ? 0.3 : pressed ? 0.6 : 1 },
+                      ]}
+                    >
+                      <Ionicons name="chevron-back" size={18} color={cores.titulo} />
+                      <View>
+                        <Text style={[styles.rotuloBotaoFinal, { color: cores.titulo }]}>Voltar</Text>
+                        <Text style={[styles.refBotaoFinal, { color: cores.secundario }]}>
+                          {rotuloAnterior || '—'}
+                        </Text>
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => irPara(seguinte)}
+                      disabled={!seguinte}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        seguinte
+                          ? `Próximo capítulo: ${formatarReferencia(seguinte.livro, seguinte.capitulo)}`
+                          : 'Sem próximo capítulo'
+                      }
+                      style={({ pressed }) => [
+                        styles.botaoFinal,
+                        styles.botaoFinalPrincipal,
+                        {
+                          backgroundColor: cores.titulo,
+                          borderColor: cores.titulo,
+                          opacity: !seguinte ? 0.3 : pressed ? 0.8 : 1,
+                        },
+                      ]}
+                    >
+                      <View style={styles.textoDireita}>
+                        <Text style={[styles.rotuloBotaoFinal, { color: cores.sobreTitulo }]}>
+                          Próximo
+                        </Text>
+                        <Text style={[styles.refBotaoFinal, { color: cores.sobreTitulo, opacity: 0.85 }]}>
+                          {rotuloSeguinte || '—'}
+                        </Text>
+                      </View>
+                      <Ionicons name="chevron-forward" size={18} color={cores.sobreTitulo} />
+                    </Pressable>
+                  </View>
                 </>
               )}
             </Animated.View>
@@ -544,16 +588,14 @@ export default function Leitura() {
         </View>
       </Animated.View>
 
-      {/* Barra inferior: capítulo anterior / seguinte */}
-      <Animated.View
-        pointerEvents={controlesVisiveis ? 'box-none' : 'none'}
+      {/* Barra inferior: capítulo anterior / seguinte — sempre visível */}
+      <View
         style={[
           styles.rodape,
           {
             paddingBottom: insets.bottom,
             backgroundColor: cores.fundo,
             borderTopColor: cores.linha,
-            opacity: visibilidade,
           },
         ]}
       >
@@ -564,10 +606,10 @@ export default function Leitura() {
           accessibilityLabel={
             anterior ? `Capítulo anterior: ${formatarReferencia(anterior.livro, anterior.capitulo)}` : 'Sem capítulo anterior'
           }
-          style={({ pressed }) => [styles.navegacao, { opacity: !anterior ? 0 : pressed ? 0.5 : 1 }]}
+          style={({ pressed }) => [styles.navegacao, { opacity: !anterior ? 0.3 : pressed ? 0.5 : 1 }]}
         >
-          <Ionicons name="chevron-back" size={18} color={cores.titulo} />
-          <Text style={[styles.textoNavegacao, { color: cores.secundario }]}>{rotuloAnterior}</Text>
+          <Ionicons name="chevron-back" size={20} color={cores.titulo} />
+          <Text style={[styles.textoNavegacao, { color: cores.titulo }]}>Voltar</Text>
         </Pressable>
 
         <Text style={[styles.posicao, { color: cores.secundario }]}>
@@ -584,13 +626,13 @@ export default function Leitura() {
           style={({ pressed }) => [
             styles.navegacao,
             styles.navegacaoDireita,
-            { opacity: !seguinte ? 0 : pressed ? 0.5 : 1 },
+            { opacity: !seguinte ? 0.3 : pressed ? 0.5 : 1 },
           ]}
         >
-          <Text style={[styles.textoNavegacao, { color: cores.secundario }]}>{rotuloSeguinte}</Text>
-          <Ionicons name="chevron-forward" size={18} color={cores.titulo} />
+          <Text style={[styles.textoNavegacao, { color: cores.titulo }]}>Próximo</Text>
+          <Ionicons name="chevron-forward" size={20} color={cores.titulo} />
         </Pressable>
-      </Animated.View>
+      </View>
 
       <AvisoDiscreto
         mensagem={aviso}
@@ -709,11 +751,42 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   textoNavegacao: {
-    fontFamily: FONTES.interface,
-    fontSize: 13,
+    fontFamily: FONTES.interfaceForte,
+    fontSize: 15,
   },
   posicao: {
+    fontFamily: FONTES.interfaceMedia,
+    fontSize: 13,
+  },
+  botoesFinais: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 8,
+  },
+  botaoFinal: {
+    flex: 1,
+    minHeight: 60,
+    borderWidth: 1.5,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 12,
+  },
+  botaoFinalPrincipal: {
+    justifyContent: 'flex-end',
+  },
+  textoDireita: {
+    alignItems: 'flex-end',
+    flexShrink: 1,
+  },
+  rotuloBotaoFinal: {
+    fontFamily: FONTES.interfaceForte,
+    fontSize: 15,
+  },
+  refBotaoFinal: {
     fontFamily: FONTES.interface,
-    fontSize: 12,
+    fontSize: 13,
+    marginTop: 2,
   },
 });

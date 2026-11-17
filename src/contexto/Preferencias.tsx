@@ -18,7 +18,7 @@ export interface Preferencias {
 }
 
 export const PREFERENCIAS_PADRAO: Preferencias = {
-  tamanhoFonte: 18,
+  tamanhoFonte: 20,
   alturaLinha: 1.7,
   tema: 'claro',
   ocultarControlesAoRolar: true,

@@ -1,4 +1,4 @@
-{
+﻿{
   "expo": {
     "name": "Bíblia Sagrada ACF",
     "slug": "biblia-sagrada-acf",
@@ -7,7 +7,7 @@
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#F5F0E6",
+    "backgroundColor": "#FAF7F0",
     "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "br.com.seudominio.bibliaacf",
@@ -33,8 +33,8 @@
       "name": "Bíblia Sagrada ACF",
       "shortName": "Bíblia ACF",
       "lang": "pt-BR",
-      "backgroundColor": "#F5F0E6",
-      "themeColor": "#F5F0E6"
+      "backgroundColor": "#FAF7F0",
+      "themeColor": "#FAF7F0"
     },
     "plugins": [
       "expo-router",
@@ -46,7 +46,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 160,
           "resizeMode": "contain",
-          "backgroundColor": "#F5F0E6",
+          "backgroundColor": "#FAF7F0",
           "dark": {
             "image": "./assets/images/splash-icon.png",
             "backgroundColor": "#211D1A"

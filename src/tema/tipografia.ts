@@ -11,6 +11,7 @@
 import {
   Lora_400Regular,
   Lora_400Regular_Italic,
+  Lora_500Medium,
   Lora_600SemiBold,
 } from '@expo-google-fonts/lora';
 import {
@@ -23,6 +24,7 @@ import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold } from '@expo-goog
 export const FONTES_PARA_CARREGAR = {
   Lora_400Regular,
   Lora_400Regular_Italic,
+  Lora_500Medium,
   Lora_600SemiBold,
   CormorantGaramond_400Regular_Italic,
   CormorantGaramond_500Medium,
@@ -33,7 +35,8 @@ export const FONTES_PARA_CARREGAR = {
 };
 
 export const FONTES = {
-  texto: 'Lora_400Regular',
+  // Peso médio: traço mais firme e legível em tela, sem perder o ar de livro.
+  texto: 'Lora_500Medium',
   textoItalico: 'Lora_400Regular_Italic',
   textoForte: 'Lora_600SemiBold',
   titulo: 'CormorantGaramond_600SemiBold',
