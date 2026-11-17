@@ -17,6 +17,7 @@ import {
   NativeSyntheticEvent,
   Platform,
   Pressable,
+  GestureResponderEvent,
   ScrollView as RNScrollView,
   Share,
   StyleSheet,
@@ -27,7 +28,13 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Clipboard from 'expo-clipboard';
 import { Ionicons } from '@expo/vector-icons';
-import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, ScrollView as GHScrollView } from 'react-native-gesture-handler';
+import { NA_WEB } from '../../../src/db/banco';
+
+// Celular: ScrollView integrada ao detector de gestos. Navegador: rolagem nativa.
+const Rolagem: typeof RNScrollView = NA_WEB
+  ? RNScrollView
+  : (GHScrollView as unknown as typeof RNScrollView);
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BotaoIcone } from '../../../src/componentes/BotaoIcone';
 import { Ornamento } from '../../../src/componentes/Ornamento';
@@ -261,6 +268,32 @@ export default function Leitura() {
     [],
   );
 
+  // No navegador, o detector de gestos bloqueia a rolagem por toque (touch-action: none).
+  // Lá usamos a rolagem nativa do navegador e detectamos o deslize lateral pelos toques.
+  const inicioToque = useRef<{ x: number; y: number } | null>(null);
+  const aoIniciarToque = (e: GestureResponderEvent) => {
+    inicioToque.current = { x: e.nativeEvent.pageX, y: e.nativeEvent.pageY };
+  };
+  const aoTerminarToque = (e: GestureResponderEvent) => {
+    const inicio = inicioToque.current;
+    inicioToque.current = null;
+    if (!inicio) return;
+    const dx = e.nativeEvent.pageX - inicio.x;
+    const dy = e.nativeEvent.pageY - inicio.y;
+    if (Math.abs(dx) >= DISTANCIA_DESLIZE && Math.abs(dx) > Math.abs(dy) * 2) {
+      deslizeRef.current(dx < 0 ? 1 : -1);
+    }
+  };
+
+  const envolverDeslize = (rolagem: React.ReactElement) =>
+    NA_WEB ? (
+      <View style={styles.raiz} onTouchStart={aoIniciarToque} onTouchEnd={aoTerminarToque}>
+        {rolagem}
+      </View>
+    ) : (
+      <GestureDetector gesture={gestoDeslize}>{rolagem}</GestureDetector>
+    );
+
   const voltarAoInicio = () => {
     if (router.canDismiss()) router.dismissAll();
     else router.replace('/');
@@ -397,8 +430,9 @@ export default function Leitura() {
 
   return (
     <View style={[styles.raiz, { backgroundColor: cores.fundo }]}>
-      <GestureDetector gesture={gestoDeslize}>
-        <ScrollView
+      {envolverDeslize(
+        <Rolagem
+          style={styles.raiz}
           ref={scrollRef}
           onScroll={aoRolar}
           scrollEventThrottle={32}
@@ -549,8 +583,8 @@ export default function Leitura() {
               )}
             </Animated.View>
           </Pressable>
-        </ScrollView>
-      </GestureDetector>
+        </Rolagem>,
+      )}
 
       {/* Barra superior */}
       <Animated.View
