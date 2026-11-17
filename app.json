@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Bíblia Sagrada ACF",
+    "slug": "biblia-sagrada-acf",
+    "scheme": "bibliaacf",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#F5F0E6",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "br.com.seudominio.bibliaacf",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleDevelopmentRegion": "pt-BR"
+      }
+    },
+    "android": {
+      "package": "br.com.seudominio.bibliaacf",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#3C2111"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "Bíblia Sagrada ACF",
+      "shortName": "Bíblia ACF",
+      "lang": "pt-BR",
+      "backgroundColor": "#F5F0E6",
+      "themeColor": "#F5F0E6"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#F5F0E6",
+          "dark": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#211D1A"
+          }
+        }
+      ]
+    ]
+  }
+}
